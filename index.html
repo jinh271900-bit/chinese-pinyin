@@ -757,6 +757,9 @@ updateControls();
 .vowel-video-close{position:absolute;right:9px;top:7px;width:35px;height:35px;border:0;border-radius:50%;background:#edf2f7;color:#33435e;font-size:23px;line-height:1;cursor:pointer;}
 .vowel-video-dialog video{display:block;width:100%;height:auto;max-height:calc(88dvh - 90px);object-fit:contain;border-radius:8px;background:#111;}
 @media(max-width:600px){.vowel-video-dialog{width:min(320px,88vw);}}
+
+.vowel-video-dialog .vowel-video-viewport.is-uo-crop{position:relative;aspect-ratio:1080 / 636;flex:none;}
+.vowel-video-dialog .vowel-video-viewport.is-uo-crop video{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover;border-radius:0;}
 </style><div class="vowel-video-overlay" hidden="" id="vowel-video-overlay">
 <div aria-labelledby="vowel-video-heading" aria-modal="true" class="vowel-video-dialog" role="dialog">
 <div class="vowel-video-heading" id="vowel-video-heading"></div>
@@ -774,14 +777,14 @@ updateControls();
  const zoomKeys=new Set(['ai','ao','an','en','ou','ü','üan','üe','ui','ün(2)','un','ün','zuo','jiao yu','jue zuo','shuo','ie','in']);
  player.addEventListener('loadedmetadata',()=>{
   if(player.videoWidth && player.videoHeight){
-   viewport.style.aspectRatio=player.videoWidth+' / '+player.videoHeight;
+   viewport.style.aspectRatio=viewport.classList.contains('is-uo-crop') ? '1080 / 636' : player.videoWidth+' / '+player.videoHeight;
   }
  });
  const files={"uo":"uo.mp4","shuo":"shuo.mp4","ün(2)":"ün(2).mp4","in":"in.mp4","ü(2)":"ü(2).mp4","eng":"eng.mp4","jiao yu":"jiao yu.mp4","an":"an.mp4","e":"e.mp4","iu":"iu.mp4","ie":"ie.mp4","ei":"ei.mp4","a":"a.mp4","en":"en.mp4","üe":"üe.mp4","zuo":"zuo.mp4","ang":"ang.mp4","ün":"ün.mp4","i":"i.mp4","ou":"ou.mp4","ao":"ao.mp4","u":"u.mp4","ai":"ai.mp4","o":"o.mp4","üan":"üan.mp4","ing":"ing.mp4","un":"un.mp4","ui":"ui.mp4","jue zuo":"jue zuo.mp4","ong":"ong.mp4","ü":"ü.mp4"};
  function dismiss(){player.pause();player.removeAttribute('src');player.load();overlay.hidden=true;document.body.style.overflow='';if(lastTrigger)lastTrigger.focus({preventScroll:true});}
  document.querySelectorAll('.vowel-video-trigger').forEach(button=>button.addEventListener('click',()=>{
   const key=button.dataset.vowelVideo;if(!files[key])return;
-  lastTrigger=button;viewport.classList.toggle('is-mouth-zoom',zoomKeys.has(key));title.textContent=button.textContent.replace('▶','').trim()+' · 발음 영상';
+  lastTrigger=button;viewport.classList.toggle('is-uo-crop',key==='uo');viewport.style.aspectRatio=key==='uo'?'1080 / 636':'';viewport.classList.toggle('is-mouth-zoom',zoomKeys.has(key));title.textContent=button.textContent.replace('▶','').trim()+' · 발음 영상';
   player.pause();player.src='videos/'+encodeURIComponent(files[key]);player.currentTime=0;
   overlay.hidden=false;document.body.style.overflow='hidden';
   const promise=player.play();if(promise&&promise.catch)promise.catch(()=>{ /* Safari may require a second user gesture for audible playback */ });
