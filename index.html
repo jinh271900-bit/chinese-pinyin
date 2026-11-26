@@ -758,8 +758,6 @@ updateControls();
 .vowel-video-dialog video{display:block;width:100%;height:auto;max-height:calc(88dvh - 90px);object-fit:contain;border-radius:8px;background:#111;}
 @media(max-width:600px){.vowel-video-dialog{width:min(320px,88vw);}}
 
-.vowel-video-dialog .vowel-video-viewport.is-uo-crop{position:relative;aspect-ratio:1080 / 636;flex:none;}
-.vowel-video-dialog .vowel-video-viewport.is-uo-crop video{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover;border-radius:0;}
 </style><div class="vowel-video-overlay" hidden="" id="vowel-video-overlay">
 <div aria-labelledby="vowel-video-heading" aria-modal="true" class="vowel-video-dialog" role="dialog">
 <div class="vowel-video-heading" id="vowel-video-heading"></div>
@@ -777,15 +775,15 @@ updateControls();
  const zoomKeys=new Set(['ai','ao','an','en','ou','ü','üan','üe','ui','ün(2)','un','ün','zuo','jiao yu','jue zuo','shuo','ie','in']);
  player.addEventListener('loadedmetadata',()=>{
   if(player.videoWidth && player.videoHeight){
-   viewport.style.aspectRatio=viewport.classList.contains('is-uo-crop') ? '1080 / 636' : player.videoWidth+' / '+player.videoHeight;
+   viewport.style.aspectRatio=player.videoWidth+' / '+player.videoHeight;
   }
  });
  const files={"uo":"uo.mp4","shuo":"shuo.mp4","ün(2)":"ün(2).mp4","in":"in.mp4","ü(2)":"ü(2).mp4","eng":"eng.mp4","jiao yu":"jiao yu.mp4","an":"an.mp4","e":"e.mp4","iu":"iu.mp4","ie":"ie.mp4","ei":"ei.mp4","a":"a.mp4","en":"en.mp4","üe":"üe.mp4","zuo":"zuo.mp4","ang":"ang.mp4","ün":"ün.mp4","i":"i.mp4","ou":"ou.mp4","ao":"ao.mp4","u":"u.mp4","ai":"ai.mp4","o":"o.mp4","üan":"üan.mp4","ing":"ing.mp4","un":"un.mp4","ui":"ui.mp4","jue zuo":"jue zuo.mp4","ong":"ong.mp4","ü":"ü.mp4"};
  function dismiss(){player.pause();player.removeAttribute('src');player.load();overlay.hidden=true;document.body.style.overflow='';if(lastTrigger)lastTrigger.focus({preventScroll:true});}
  document.querySelectorAll('.vowel-video-trigger').forEach(button=>button.addEventListener('click',()=>{
   const key=button.dataset.vowelVideo;if(!files[key])return;
-  lastTrigger=button;viewport.classList.toggle('is-uo-crop',key==='uo');viewport.style.aspectRatio=key==='uo'?'1080 / 636':'';viewport.classList.toggle('is-mouth-zoom',zoomKeys.has(key));title.textContent=button.textContent.replace('▶','').trim()+' · 발음 영상';
-  player.pause();player.src='videos/'+encodeURIComponent(files[key]);player.currentTime=0;
+  lastTrigger=button;viewport.style.aspectRatio='';viewport.classList.toggle('is-mouth-zoom',zoomKeys.has(key));title.textContent=button.textContent.replace('▶','').trim()+' · 발음 영상';
+  player.pause();player.src='videos/'+encodeURIComponent(files[key])+(key==='uo'?'?v=crop20261126':'');player.currentTime=0;
   overlay.hidden=false;document.body.style.overflow='hidden';
   const promise=player.play();if(promise&&promise.catch)promise.catch(()=>{ /* Safari may require a second user gesture for audible playback */ });
  }));
@@ -793,9 +791,4 @@ updateControls();
  overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)dismiss()});
 })();
-</script><style id="mobile-guide-final-layout">@media(max-width:900px){#mobile-tone-slot{display:block!important;margin:0 0 4px!important;width:100%!important}#mobile-tone-slot .tone-guide{display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important}#mobile-tone-slot .vowel-order{margin:0!important;line-height:1.4;text-align:center}main.wrap .scroll{margin-top:0!important}}</style><style id="static-mobile-guide-fix">#mobile-static-guide{display:none!important}@media(max-width:900px){header .practice-with-guide>.tone-guide{display:none!important}#mobile-static-guide{display:flex!important;flex-direction:column;align-items:center;gap:3px;width:100%;margin:0 0 4px;order:0!important}#mobile-static-guide img{width:min(100%,540px);height:auto}#mobile-static-guide .vowel-order{margin:10px 0 10px!important;font-size:var(--mobile-pinyin-size,14px)!important;align-self:stretch!important;width:100%!important;box-sizing:border-box;text-align:right!important;padding-right:8px!important}main.wrap .scroll{margin-top:0!important}}</style><script>(()=>{const update=()=>{const b=document.querySelector('#chart td button');if(b)document.documentElement.style.setProperty('--mobile-pinyin-size',getComputedStyle(b).fontSize)};update();addEventListener('resize',update);addEventListener('load',update)})();</script><style id="vowel-order-final-style">.vowel-order{color:#000!important;font-style:italic!important;text-align:left!important}@media(max-width:900px){#mobile-static-guide .vowel-order{color:#000!important;font-style:italic!important;text-align:left!important;padding-left:8px!important;padding-right:0!important}}</style><style id="uo-mobile-crop-fix">
-@media (max-width:900px){
-#vowel-video-overlay .vowel-video-viewport.is-uo-crop{display:block!important;position:relative!important;width:100%!important;height:0!important;padding:0 0 58.888889%!important;aspect-ratio:auto!important;overflow:hidden!important;flex:0 0 auto!important;}
-#vowel-video-overlay .vowel-video-viewport.is-uo-crop #vowel-video-player{position:absolute!important;left:0!important;top:50%!important;right:auto!important;bottom:auto!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:1080 / 1920!important;object-fit:contain!important;transform:translateY(-50%)!important;}
-}
-</style></body></html>
+</script><style id="mobile-guide-final-layout">@media(max-width:900px){#mobile-tone-slot{display:block!important;margin:0 0 4px!important;width:100%!important}#mobile-tone-slot .tone-guide{display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important}#mobile-tone-slot .vowel-order{margin:0!important;line-height:1.4;text-align:center}main.wrap .scroll{margin-top:0!important}}</style><style id="static-mobile-guide-fix">#mobile-static-guide{display:none!important}@media(max-width:900px){header .practice-with-guide>.tone-guide{display:none!important}#mobile-static-guide{display:flex!important;flex-direction:column;align-items:center;gap:3px;width:100%;margin:0 0 4px;order:0!important}#mobile-static-guide img{width:min(100%,540px);height:auto}#mobile-static-guide .vowel-order{margin:10px 0 10px!important;font-size:var(--mobile-pinyin-size,14px)!important;align-self:stretch!important;width:100%!important;box-sizing:border-box;text-align:right!important;padding-right:8px!important}main.wrap .scroll{margin-top:0!important}}</style><script>(()=>{const update=()=>{const b=document.querySelector('#chart td button');if(b)document.documentElement.style.setProperty('--mobile-pinyin-size',getComputedStyle(b).fontSize)};update();addEventListener('resize',update);addEventListener('load',update)})();</script><style id="vowel-order-final-style">.vowel-order{color:#000!important;font-style:italic!important;text-align:left!important}@media(max-width:900px){#mobile-static-guide .vowel-order{color:#000!important;font-style:italic!important;text-align:left!important;padding-left:8px!important;padding-right:0!important}}</style></body></html>
